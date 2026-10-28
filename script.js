@@ -1,0 +1,1117 @@
+// ================= TOGEL TEMA =================
+const themeToggle = document.getElementById("themeToggle");
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme === "dark") {
+  document.body.classList.add("dark-mode");
+  if (themeToggle) {
+    themeToggle.innerHTML = "☀️ Light Mode";
+  }
+}
+if (themeToggle) {
+  themeToggle.addEventListener("click", function (e) {
+    e.preventDefault();
+    document.body.classList.toggle("dark-mode");
+    if (document.body.classList.contains("dark-mode")) {
+      localStorage.setItem("theme", "dark");
+      themeToggle.innerHTML = "☀️ Light Mode";
+    } else {
+      localStorage.setItem("theme", "light");
+      themeToggle.innerHTML = "🌙 Dark Mode";
+    }
+  });
+}
+
+
+
+
+
+/* ================= BG-BERGERAK ================= */
+const bgslide = document.getElementById("bg-slide");
+const images = [
+  "src/bg1.webp",
+  "src/bg2.webp",
+  "src/bg3.webp",
+  "src/bg4.webp"
+];
+if (bgslide) {
+  let i = 0;
+  bgslide.style.backgroundImage = `url(${images[0]})`;
+  setInterval(() => {
+    bgslide.style.backgroundImage = `url(${images[i]})`;
+    i = (i + 1) % images.length;
+  }, 5000);
+}
+
+
+
+
+
+// ================= TOOLS =================
+function getData() {
+  const raw = localStorage.getItem('books');
+  return raw ? JSON.parse(raw) : [];
+}
+function saveData(books) {
+  localStorage.setItem("books", JSON.stringify(books));
+}
+
+
+
+
+
+/* ================= BOOK-BERGERAK ================= */
+const track = document.getElementById("bookTrack");
+if (track) {
+  const books = getData();
+  books.forEach((book, index) => {
+    track.innerHTML += `
+      <div class="book" data-index="${index}">
+        <img src="${book.img}" alt="${book.title}">
+      </div>
+    `;
+  });
+  track.innerHTML += track.innerHTML;
+  let scrollAmount = 0;
+  setInterval(() => {
+    scrollAmount += 0.3;
+    if (scrollAmount >= track.scrollWidth / 2) {
+      scrollAmount = 0;
+    }
+    track.style.transform = `translateX(-${scrollAmount}px)`;
+  }, 20);
+}
+document.addEventListener("click", function (e) {
+  const book = e.target.closest(".book");
+  if (!book) return;
+  const index = book.dataset.index;
+  localStorage.setItem("openBookDetail", index);
+  window.location.href = "user-galeri.html";
+});
+
+
+
+
+
+// ================= DATA BASE KATALOG BUKU =================
+if (!localStorage.getItem("books")) {
+  const defaultBooks = [
+    {
+      title: "Fangirl",
+      author: "Rainbow Rowell",
+      category: "Fiction",
+      img: "src/book-Fangirl.webp",
+      abstract: "Novel Fangirl ini menceritakan tentang dua saudara kembar Cath dan Gelatik yang merupakan penggemar Simon Snow. Cath adalah saudara kembar identik dan pemalu dari saudara perempuannya.",
+      penerbit: "Martins Griffin : New York., 2013"
+    },
+    {
+      title: "Remember When : Ketika Aku dan Kau Jatuh Cinta",
+      author: "Winna Efendi",
+      category: "Fiction",
+      img: "src/book-Remember When.webp",
+      abstract: "Kisah cinta dari masa SMA selalu menjadi tema yang tidak pernah basi untuk diangkat ke dalam sebuah novel.",
+      penerbit: "Gagas Media : JAKARTA., 2011"
+    },
+    {
+      title: "Bumi Cinta Cetakan 1",
+      author: "Habiburrahman El Shirazy",
+      category: "Fiction",
+      img: "src/book-Bumu Cinta Cetakan 1.webp",
+      abstract: "Apajadinya, jika seorang santri salaf, bernama Muhammad Ayyas, hidup di negeri paling menjunjung tinggi seks bebas dan pornografi, yaitu Rusia?",
+      penerbit: "Ihwah : JAKARTA., 2011"
+    },
+    {
+      title: "Chicken Soup for The Soul: Graphic Novel Perjalanan Ajaib dan Kisah-kisah nyata menyentuh lainnya",
+      author: "Kim Donghwa",
+      category: "Fiction",
+      img: "src/book-Chicken Soup for The Soul.webp",
+      abstract: "Chicken Soup for the Soul graphic novel buku ketiga hadir di tengah penggemarnya. Seri bestseller dunia tentang kisah nyata luarbiasa.",
+      penerbit: "Gramedia Pustaka Utama : JAKARTA., 2009"
+    },
+    {
+      title: "Eleanor & Park",
+      author: "Rainbow Rowell",
+      category: "Fiction",
+      img: "src/book-Eleanor & Park.webp",
+      abstract: "Buku ini menggunakan sudut pandang orang ketiga, dan narasinya bergantian antara perspektif Eleanor dan perspektif Park.",
+      penerbit: "St. Martin Press : Amerika., 2013"
+    },
+    {
+      title: "Breaking Dawn : Awal Yang Baru",
+      author: "Stephenie Meyerl",
+      category: "Fiction",
+      img: "src/book-Breaking Dawn.webp",
+      abstract: "Bila kau mencintai orang yang membunuhmu, kau tak punya pilihan. Bila nyawamu satu-satunya yang harus kauberikan untuk orang yang kaucintai, bagaimana mungkin kau tidak memberikannya? Bagi Bella Swan, mencintai dan dicintai vampir bernama Edward adalah bagaikan khayalan dan mimpi buruk yang dirajut jadi satu ke dalam kenyataan. Bukan itu saja, hubungannya yang sangat istimewa dengan Jacob Black sang werewolf, ternyata menyeret Bella ke pilihan-pilihan pelik yang membuat hati keduanya tercabik-cabik. Tapi konon cinta harus memilih, dan karenanya Bella harus memutuskan. Dan sebagai orang yang sangat mengenal Bella, Jacob tahu persis apa keputusan gadis itu. Lalu sanggupkah Jacob meninggalkan Bella selamanya untuk menyembuhkan luka-luka hatinya sendiri? Dan ketika Bella mencarinya, sanggupkah Jacob mengatakan tidak?",
+      penerbit: "Gramedia Pustaka Utama : JAKARTA., 2009"
+    },
+    {
+      title: "The Cold Six Thousand",
+      author: "James Ellory",
+      category: "Fiction",
+      img: "src/book-The Cold Six Thousand.webp",
+      abstract: "Wayne Tedrow Jr datang untuk membunuh seorang pria. Bayarannya $6.000. Dia malah mendapati dirinya berada di tengah-tengah upaya menutup-nutupi pembunuhan JFK. Di sana, dia mengikuti perjalanan lima tahun yang mengerikan melalui sisi gelap kebijakan publik melalui Las Vegas, Howard Hughes, Vietnam, perdagangan narkoba CIA, Kuba, bisnis hiburan yang menjijikkan, rasisme, dan Klan.Ini adalah tahun 1960-an di bawah lensa tajam Ellroy, ikon-ikon era itu berbaur dengan polisi, pembunuh, penjahat, dan provokator. The Cold Six Thousand adalah pertemuan historis sebagai mimpi buruk Amerika. Fiksi yang dahsyat dan epik. Sebuah mahakarya.",
+      penerbit: "Century : Australia., 2001"
+    },
+    {
+      title: "Matt & Mou",
+      author: "Wulanfadi",
+      category: "Fiction",
+      img: "src/book-Matt & Mou.webp",
+      abstract: "Buku ini menceritakan tentang Matt, Cowok antisosial yang bisa kau temui di pojok kelas, atau di kantin dengan buku bacaan tebalnya. Benar-benar tertutup. Apalagi soal perasaan. Kematian ayahnya semakin membuat Matt enggan membuka diri. Lain lagi dengan Mou. Cewek hiperaktif yang bisa kau temui di keramaian kantin, atau di lapangan sekolah sebagai pemandu sorak. Benar-benar terbuka. Apalagi soal perasaan. Perceraian orangtuanya membuat Mou terpaksa menutupi kesedihan dengan tawa. Keduanya bersahabat karena kegigihan Mou. Matt and Mou adalah sepasang sehabat yang saling memendam rasa. Namun karena persahabatan itulah, mereka berpikir bahwwa mereka hanyalah sepasang sahabat, tidak akan pernah lebih dai itu.Seperti ketika api dan es yang bersama, api tidak memancarkan kobarannya, hanya sebatas rasa hangat yang menenangkan. Sementara itu, es perlahan mencair seiring bersama sang api. Seperti itulah persahabatan Matt dan Mou sesungguhnya. Di sini diceritakan kehidupan mereka..",
+      penerbit: "Gagas Media : Jakarta, 2016"
+    },
+    {
+      title: "Sunset dan Rosie",
+      author: "Tere Liye",
+      category: "Fiction",
+      img: "src/book-Sunset dan Rosie.webp",
+      abstract: "Buku ini membahas tentang: 1. Mawar biru untuk rosie 2. Bom Jimbaran 3. Nathan Pergi 4. Pertunangan yang batal 5. Formasi Ribuan Obor 6. Pemakaman pasir 7. Demi anak- anak 8. Bertahanlah, Ros! 9. Kau terlalu mencintainya 10.Dua tahun yang berlalu cepat, dll.",
+      penerbit: "Mahaka : Jakarta, 2018"
+    },
+    {
+      title: "Kana di Negeri Kiwi",
+      author: "Rosemary Kesauly",
+      category: "Fiction",
+      img: "src/book-Kana di Negeri Kiwi.webp",
+      abstract: "Mengisahkan perjalanan hidup seorang remaja bernama Kana. Kana harus pindah dari Yogyakarta ke Selandia Baru, yang dikenal sebagai Negeri Kiwi, setelah orang tuanya bercerai. Novel ini mengeksplorasi tema penyesuaian diri, persahabatan, dan pertumbuhan pribadi, serta bagaimana Kana menghadapi berbagai tantangan dalam hidup barunya di Negeri Kiwi.",
+      penerbit: "Gramedia Pustaka Utama : Jakarta, 2005"
+    },
+    {
+      title: "Entrepreneurship : Theory, Process, Practice",
+      author: "Kuratko",
+      category: "Kps",
+      img: "src/book-Entrepreneurship.webp",
+      abstract: "Buku ini membahas tentang: 1. Pola pikir kewirausahaan pada abad kedua puluh satu 2. Memulai usaha wirausaha 3. Mengembangkan rencana kewirausahaan 4. Strategi pertumbuhan untuk usaha wirausaha 5. Sumber modal untuk wirausaha.",
+      penerbit: "Cengage Learning : SINGAPORE., 2020"
+    },
+    {
+      title: "Advanced Accounting global edition",
+      author: "Floyd a. Beams, Joseph H. Anthony, Bruce Bettinghaus, Kenneth A. Smith ",
+      category: "Kps",
+      img: "src/book-Advanced book-Accounting global edition.webp",
+      abstract: "Buku ini membahas tentang: 1. Kombinasi bisnis 2. Investasi saham - akuntansi dan pelaporan investor 3. Pengantar laporan keuangan konsolidasian 4. Teknik dan prosedur konsolidasi 5. Persediaan-transaksi laba antar perusahaan",
+      penerbit: "Pearson : United Kingdom., 2018"
+    },
+    {
+      title: "Mathematics for Economics and Business",
+      author: "Ian Jacques",
+      category: "Kps",
+      img: "src/book-Mathematics for Economics and Business.webp",
+      abstract: "Buku ini membahas tentang : Buku ini membahas tentang : 1.Pengantar aljabar, 2. Aljabar lanjutan, 3. Grafik persamaan linear, 4. Penyelesaian aljabar persamaan linear simultan, 5. Analisis penawaran dan permintaan, 6. Fungsi kuadrat, 7. Pendapatan, biaya, dan laba, 8. Indeks dan logaritma, 9. Fungsi eksponensial dan logaritma natural, 10. Deret geometri, 11. Penilaian investasi, 12. Turunan suatu fungsi, 13. Aturan diferensiasi, 14. Fungsi marginal, 15. Aturan diferensiasi lanjutan, 16. Fungsi beberapa variabel, 17 Elastisitas parsial dan fungsi marginal, 18 Statika komparatif, 19. Optimasi tanpa kendala, 20. Optimasi dengan kendala, 21. Pengganda Lagrange, 22. Integrasi tak tentu, 23. Integrasi tentu, 24. Operasi matriks dasar, 25. Inversi matriks, 26. Cramer aturan, 27.Solusi grafis dari masalah pemrograman linier, 28.Aplikasi pemrograman linier, 29.Persamaan perbedaan, 30.Persamaan diferensial",
+      judulSeri: "-",
+      penerbit: "Pearson : United Kingdom., 2023"
+    },
+    {
+      title: "Pearson New International Edition ; Starting out with programming logic and design",
+      author: "Tony Gaddis",
+      category: "Kps",
+      img: "src/book-Pearson New International Edition; Starting out with programming logic and design.webp",
+      abstract: "buku ini berisi tentang: 1. Input, pemrosesan dan output, 2. Modul, 3. Struktur keputusan dan logika boolean, 4. Struktur pengulangan, 5. Finctions, 6. Validasi masukan, 7. Array, 8. Menyortir dan mencari array",
+      judulSeri: "-",
+      penerbit: "Pearson : England., 2014"
+    },
+    {
+      title: "Concepts of Programming Languages",
+      author: "Robert W. Sebesta",
+      category: "Kps",
+      img: "src/book-Concepts of Programming Languages.webp",
+      abstract: "Buku ini membahas tentang : 1. Alasan Mempelajari Konsep Bahasa Pemrograman, 2. Kriteria Evaluasi Bahasa, 3. Pertukaran Desain Bahasa, 4. Evolusi Bahasa Pemrograman Utama, 5. Langkah Pertama Menuju Kecanggihan: ALGOL 60, 6. Menggabungkan Fitur Imperatif dan Berorientasi Objek: C++, 7. Bahasa Berorientasi Objek Berbasis Imperatif: Java, 8. Menjelaskan Sintaks dan Semantik, 9. Masalah Umum dalam Mendeskripsikan Sintaks, 10. Mendeskripsikan Makna Program: Semantik Dinamis, 11. Analisis Leksikal dan Sintaksis, 12 Nama, Pengikatan, dan Cakupan, 13. Ekspresi dan Pernyataan Penugasan, 14. Masalah Desain untuk Tipe Data Abstrak, 15. Dukungan untuk Pemrograman Berorientasi Objek dalam Bahasa Tertentu",
+      penerbit: "Pearson : United Kingdom., 2023"
+    },
+    {
+      title: "Executive's guide to IT governance; Improving systems processess with service management,COBIT,and ITIL",
+      author: "Robert R. Moeller",
+      category: "Kps",
+      img: "src/book-Executive's guide to IT governance; Improving systems processess with service management,COBIT,and ITIL.webp",
+      abstract: "Buku ini adalah panduan eksekutif untuk konsep penting tata kelola TI ini. Fokus kami bukan pada spesialis TI yang memasang perangkat keras, perangkat lunak, dan koneksi jaringan TI atau sumber daya penting seperti auditor internal yang menguji dan meninjau proses TI.Buku ini membahas tentang: 1. Pentingnya tata kelola TI untuk semua perusahaan, 2. Konsep dasar pemerintahan dan aturan sarbanes-oxley, 3. Tata kelola perusahaan dan alat GRC, 4. Tata kelola TI dan kontrol internal koso, 5. COBIT dan lembaga tata kelola TI",
+      penerbit: "John Wiley And Sons : New Jersey., 2013"
+    },
+    {
+      title: "Organizational behavior a Practical,problem-solving approach",
+      author: "Angelo Kinicki",
+      category: "Kps",
+      img: "src/book-Organizational behavior a Practical,problem-solving approach.webp",
+      abstract: "Buku ini membahas tentang: 1.Perilaku individu, 2. Nilai dan sikap, 3. Perbedaan dan emosi individu, 4. Persepsi sosial dan pengelolaan keragaman, 5. Landasan motivasi karyawan, 6. Manajemen kinerja, 7.Perilaku organisasi yang positif",
+      penerbit: "MC GRAW HILL : New York., 2021"
+    },
+    {
+      title: "Aplikasi Analisis Multivariete dengan program IBM SPSS 23",
+      author: "Imam Ghozali ",
+      category: "Kps",
+      img: "src/book-Aplikasi Analisis Multivariete dengan program IBM SPSS 23.webp",
+      abstract: "Buku ini membahas tentang: 1. Skala pengukuran dan metode analisis data, 2. Pengenalan program SPSS, aplikasi statistik deskriptif dan crosstabs, 3. Data screening dan transformasi data, 4. Uji reliabilitas dan validitas suatu kontruk atau konsep, 5. Analisis REGRESI, 6. Uji asusmsi klasik, 7. Regresi dengan uji asusmsi klasik, variabel dummy dan chow test, 8. Model regresi dengan bentuk fungsional, 9. Analisis diskriminan, 10.Korelasi kanonikal (Canonical Correlation)",
+      penerbit: "Undip : Semarang., 2016"
+    },
+    {
+      title: "Computer Organization and Architecture, Design for Performance",
+      author: "William Stallings",
+      category: "Kps",
+      img: "src/book-Computer Organization and Architecture, Design for Performance.webp",
+      abstract: "Buku ini menjelaskan tentang: 1. Konsep dasar dan evaluasi komputer, 2. Tampilan tingkat atas fungsi komputer dan interkoneksi, 3. memori internal, 4. Memori eksternal Input / Output, 5. Aritmatika komputer, 6. Logika digital, 7. Set instruksi: karakteristik dan fungsi, 8. Struktur dan fungsi prosesor, 9. Unit pemrosesan grafis tujuan umum, 10.Proyek untuk pengajaran organisasi dan arsitektur k",
+      penerbit: "Pearson : England., 2016"
+    },
+    {
+      title: "Compensation",
+      author: "Barry Gerhart, Jerry M. Newman",
+      category: "Kps",
+      img: "src/book-Compensation.webp",
+      abstract: "Buku ini membahas tentang: 1. Memperkenalkan model pembayaran dan strategi pembayaran, 2. Totalitas keputusan, 3. Mendefinisikan penyelarasan internal, 4. Analisis pekerjaan, 5. Struktur berbasis pekerjaan dan evaluasi pekerjaan, 6. Struktur berbasis orang",
+      penerbit: "MC GRAW HILL : Amerika., 2020"
+    },
+    {
+      title: "Computer Desktop Encyclopedia",
+      author: "Alan Freedman",
+      category: "Reference",
+      img: "src/book-Computer Desktop Encyclopedia.webp",
+      abstract: "Buku ini membahas tentang Komprehensif sangat up-to-date yang berisi lebih dari 15.000 istilah dan penjelasan yang mencakup banyak topik yang berkaitan dengan komputer digabungkan. Lebih dari koleksi definisi pengawakan, referensi unik ini termasuk jelas, deskripsi rinci dan ilustrasi mulai dari topik dasar sampai profesional komputer baik, siswa, guru dan teknisi. Termasuk penjelasan dari perangkat terbaru dan yang paling penting, sistem operasi, teknologi yang berhubungan dengan internet dan akronim, tidak ada buku lain dapat memberikan kedalaman dan luasnya cakupan ensiklopedia komputer desktop",
+      penerbit: "MC GRAW HILL : California., 2001"
+    },
+    {
+      title: "Kamus Lengkap Ekonomi",
+      author: "Christopher Pass",
+      category: "Reference",
+      img: "src/book-Kamus Lengkap Ekonomi.webp",
+      abstract: "Kamus lengkap Ekonomi ini yang bermula berjudul Dictionary of economics merupakan kamus handal ilmu pengetahuan dari harperCollins, UK, untuk bidang ekonomi, yang sudah dimutakhirkan dan kini sudah mengalami edisi kedua. Kamus ini menyajikan cakupan yang luas mengenai istilah-istilah pokok ilmu ekonomi yang difokuskan pada konsep-konsep dan prinsip-prinsip teoretis serta penerapan praktisnya.",
+      penerbit: "ERLANGGA : JAKARTA, 1994"
+    },
+    {
+      title: "Kamus Lengkap: Indonesia-Inggris, Inggris-Indonesia",
+      author: "K. Adi Gunawan ",
+      category: "Reference",
+      img: "src/book-Kamus Lengkap.webp",
+      abstract: "Buku ini berisi tentang: Tenses, Regular Verbs, Irregular Verbs.",
+      penerbit: "Kartika : Surabaya, -"
+    },
+    {
+      title: "Standar Akuntansi Keuangan Per 1 Oktober 2004",
+      author: "Ikatan Akuntan Indonesia",
+      category: "Reference",
+      img: "src/book-Standar Akuntansi Keuangan Per 1 Oktober 2004.webp",
+      abstract: "Buku ini membahas tentang: Sejarah standar akuntansi keuangan, Kerangka dasar penyusunan dan penyajian laporan keuangan.",
+      penerbit: "SALEMBA EMPAT : JAKARTA, 2004"
+    },
+    {
+      title: "KUP Ketentuan Umum dan Tata Cara Perpajakan",
+      author: "Muhammad Rusjdi",
+      category: "Reference",
+      img: "src/book-kup.webp",
+      abstract: "Buku ini membahas tentang: Ketentuan umum dan tata cara perpajakan, Administrasi Perpajakan, Nomor pokok wajib pajak.",
+      penerbit: "Indeks : JAKARTA, 2007"
+    },
+    {
+      title: "Kamus Pajak: Daftar singkatan , istilah perpajakan, akuntansi, bea dan cukai, serta peradilan pajak disertai dengan penjelasan",
+      author: "Adnan Abdullah",
+      category: "Reference",
+      img: "src/book-Kamus Pajak, Daftar singkatan , istilah perpajakan, akuntansi, bea dan cukai, serta peradilan pajak disertai dengan penjelasan.webp",
+      abstract: "Kamus Pajak ini menjelaskan Daftar singkatan, istilah perpajakan, akuntansi, hukum, dan cukai, serta penelitian pajak disertai dengan penjelasan terkait.",
+      penerbit: "ANDI : YOGYAKARTA, 2019"
+    },
+    {
+      title: "Standar Profesional Akuntan Publik : Standar Audit (SA) 530 Sampling Audit",
+      author: "Institut Akuntan Publik Indonesia (IAPI)",
+      category: "Reference",
+      img: "src/book-Standar Audit (SA) 530 Sampling Audit.webp",
+      abstract: "Standar audit ini diterapkan ketika auditor telah memutuskan untuk menggunakan sampling audit dalam pelaksanaan prosedur audit berkaitan dengan penggunaan sampling statistik maupun nonstatistik.",
+      penerbit: "SALEMBA EMPAT : JAKARTA, 2013"
+    },
+    {
+      title: "Standar Profesional Akuntan Publik 31 Maret 2011",
+      author: "Institut Akuntan Publik Indonesia (IAPI)",
+      category: "Reference",
+      img: "src/book-Standar Profesional Akuntan Publik 31 Maret 2011.webp",
+      abstract: "Standar Profesional Akuntan Publik (SPAP) merupakan kodifikasi berbagai pernyataan standar teknis yang memberikan panduan bagi praktisi, akuntan publik, dan staf.",
+      penerbit: "SALEMBA EMPAT : JAKARTA, 2011"
+    },
+    {
+      title: "Standar Profesional Akuntan Publik : Seri Penilaian Risiko",
+      author: "Institut Akuntan Publik Indonesia (IAPI)",
+      category: "Reference",
+      img: "src/book-standar Profesional Akuntan Publik; Seri Penilaian Risiko.webp",
+      abstract: "Standar Profesional Akuntan Publik ini membahas tentang: Keterlibatan anggota tim perikatan utama, Aktivitas audit perikatan, Dokumentasi.",
+      penerbit: "SALEMBA EMPAT : JAKARTA, 2016"
+    },
+    {
+      title: "Kamus Praktis sehari-hari bahasa Indonesia mandarin",
+      author: "Hin Goan Ganawan",
+      category: "Reference",
+      img: "src/book-Kamus Praktis sehari-hari bahasa Indonesia mandarin.webp",
+      abstract: "Kamus Indonesia-mandarin ini disusun sedemikian rupa untuk membantu teman-teman dengan mencari padanan suatu istilah kata benda untuk benda, tanaman, buah, atau hewan.",
+      penerbit: "ANDI : YOGYAKARTA, 2005"
+    },
+    {
+      title: "Tip dan Trik Meningkatkan Efisiensi, Produktivitas dan Profitabilitas",
+      author: "Fransisccus Xaverius Sadikin",
+      category: "Textbook",
+      img: "src/book-Tip dan Trik Meningkatkan Efisiensi, Produktivitas dan Profitabilitas.webp",
+      abstract: "Pokok bahasan buku ini: Perubahan adalah sikap dasar manusia dalam merealisasikan sesuatu yang sudah diperoleh menjadi lebih dan lebih sehingga dalam usaha yang minimal akan mendapatkan hasil yang optimal.",
+      penerbit: "ANDI : YOGYAKARTA., 2005"
+    },
+    {
+      title: "How they started digital : Bagaimana 25 ide - ide bagus menjadi bisnis-bisnis digital yang spektakuler",
+      author: "David Lester",
+      category: "Textbook",
+      img: "src/book-How they started digital; Bagaimana 25 ide - ide bagus menjadi bisnis-bisnis digital yang spektakuler.webp",
+      abstract: "Media penuh dengan berita utama tentang kisah sukses digital terbaru dan miliarder muda. Tetapi bagaimana bisnis-bisnis ini benar-benar merintis usahanya? Apa saja langkah-langkah untuk sukses?",
+      penerbit: "Gramedia Pustaka Utama : JAKARTA., 2015"
+    },
+    {
+      title: "145 Q & A Start Your Own Business - pasti bisa buka usaha",
+      author: "Sigma",
+      category: "Textbook",
+      img: "src/book-145 Q & A Start Your Own Business - pasti bisa buka usaha.webp",
+      abstract: "Buku ini hadir sebagai jawaban atas pertanyaan yang sering diajukan oleh banyak orang saat mereka akan membuka usaha. Ditujukan bagi siapa saja yang mempunyai impian menjadi pengusaha mandiri.",
+      penerbit: "ANDI : YOGYAKARTA., 2011"
+    },
+    {
+      title: "Psikologi Komunikasi",
+      author: "Morissan",
+      category: "Textbook",
+      img: "src/book-Psikologi Komunikasi.webp",
+      abstract: "Buku ini membahas tentang: 1. Penilaian, 2. proses berpikir dan merancang strategi pesan, 3. rencana tindakan dan logika pesan, 4. penyelenggaraan komunikasi.",
+      penerbit: "Ghalia Indonesia : Bogor., 2010"
+    },
+  ];
+  saveData(defaultBooks);
+}
+
+
+
+
+
+// ================= Action Admin =================
+function addBook() {
+  event.preventDefault();
+  const title = document.getElementById("judul_buku").value.trim();
+  const author = document.getElementById("pengarang").value.trim();
+  const category = document.getElementById("kategori").value;
+  const abstract = document.getElementById("abstrak").value.trim();
+  const penerbit = document.getElementById("penerbit").value.trim();
+  const books = getData();
+  const editIndex = localStorage.getItem("editBookIndex");
+  const coverInput = document.getElementById("cover");
+  const file = coverInput.files[0];
+  if (!title || !author || !category || !abstract || !penerbit) {
+    alert("Semua data wajib diisi!");
+    return;
+  }
+  // Save
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const newBook = {title, author, category, abstract, penerbit, img: e.target.result};
+      saveOrUpdateBook(newBook);
+    };
+    reader.readAsDataURL(file);
+  }
+  else {
+    const oldImg = editIndex !== null && editIndex !== "" ? books[editIndex].img : "src/default-book.webp";
+    const newBook = {title, author, category, abstract, penerbit, img: oldImg};
+    saveOrUpdateBook(newBook);
+  }
+}
+
+function saveOrUpdateBook(newBook) {
+  const books = getData();
+  const editIndex = localStorage.getItem("editBookIndex");
+  if (editIndex !== null && editIndex !== "") {
+    books[editIndex] = newBook;
+    localStorage.removeItem("editBookIndex");
+    alert("Buku berhasil diupdate!");
+  }
+  else {
+    books.push(newBook);
+    alert("Buku berhasil ditambahkan!");
+  }
+  saveData(books);
+  window.location.href = "admin-galeri.html";
+}
+
+function cancelEdit() {
+  localStorage.removeItem("editBookIndex");
+  window.location.href = "admin-galeri.html";
+}
+
+
+
+
+
+// ================= FILTER DAN SEARCH GALERI ADMIN =================
+const searchInputAdmin = document.getElementById("searchInput");
+const filterKategoriAdmin = document.getElementById("filterKategori");
+function filterBooksAdmin() {
+  const keyword = searchInputAdmin?.value.toLowerCase().trim() || "";
+  const kategori = filterKategoriAdmin?.value || "";
+  const books = getData();
+  const filteredBooks = books.filter(book => {
+    const cocokKeyword = book.title.toLowerCase().includes(keyword) || book.author.toLowerCase().includes(keyword);
+    const cocokKategori = kategori === "" || book.category === kategori;
+    return cocokKeyword && cocokKategori;
+  });
+  bookGridAdmin.innerHTML = "";
+  if (filteredBooks.length === 0) {
+    bookGridAdmin.innerHTML = `
+      <div class="empty-book">
+        📚 Buku tidak ditemukan
+      </div>
+    `;
+    dataCount.textContent = 0;
+    return;
+  }
+  filteredBooks.forEach(book => {
+    const originalIndex = books.indexOf(book);
+    bookGridAdmin.innerHTML += createCardAdmin(book, originalIndex);
+  });
+  dataCount.textContent = filteredBooks.length;
+}
+searchInputAdmin?.addEventListener("input", filterBooksAdmin);
+filterKategoriAdmin?.addEventListener("change", filterBooksAdmin);
+
+// ================= RIWAYAT PENCARIAN ADMIN GALERI (TERPISAH) =================
+(function setupAdminGallerySearchHistory() {
+  if (!searchInputAdmin) return;
+
+  const historyPanel = document.getElementById("adminSearchHistory");
+  const historyList = document.getElementById("adminSearchHistoryList");
+  const clearButton = document.getElementById("clearAdminSearchHistory");
+  const HISTORY_KEY = "adminGallerySearchHistory";
+  const MAX_HISTORY = 5;
+  let historyFocused = false;
+
+  function readHistory() {
+    try {
+      const value = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+      return Array.isArray(value) ? value.filter(item => typeof item === "string") : [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function writeHistory(items) {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0, MAX_HISTORY)));
+  }
+
+  function renderHistory() {
+    if (!historyPanel || !historyList) return;
+    const history = readHistory();
+    historyList.innerHTML = "";
+    history.forEach(keyword => {
+      const row = document.createElement("li");
+      row.className = "admin-history-row";
+
+      const searchItem = document.createElement("button");
+      searchItem.type = "button";
+      searchItem.className = "admin-history-item";
+      searchItem.textContent = keyword;
+      searchItem.addEventListener("click", () => {
+        searchInputAdmin.value = keyword;
+        filterBooksAdmin();
+        historyFocused = false;
+        historyPanel.hidden = true;
+      });
+
+      const removeItem = document.createElement("button");
+      removeItem.type = "button";
+      removeItem.className = "admin-history-remove";
+      removeItem.textContent = "×";
+      removeItem.setAttribute("aria-label", `Hapus riwayat ${keyword}`);
+      removeItem.addEventListener("click", () => {
+        writeHistory(readHistory().filter(item => item.toLowerCase() !== keyword.toLowerCase()));
+        renderHistory();
+      });
+
+      row.append(searchItem, removeItem);
+      historyList.appendChild(row);
+    });
+    historyPanel.hidden = history.length === 0 || !historyFocused;
+  }
+
+  function saveCurrentSearch() {
+    const keyword = searchInputAdmin.value.trim();
+    if (!keyword) return;
+    const updated = [keyword, ...readHistory().filter(item => item.toLowerCase() !== keyword.toLowerCase())];
+    writeHistory(updated);
+    renderHistory();
+  }
+
+  searchInputAdmin.addEventListener("focus", () => { historyFocused = true; renderHistory(); });
+  searchInputAdmin.addEventListener("click", () => { historyFocused = true; renderHistory(); });
+  searchInputAdmin.addEventListener("keydown", event => {
+    if (event.key === "Enter") saveCurrentSearch();
+    if (event.key === "Escape") { historyFocused = false; renderHistory(); }
+  });
+  searchInputAdmin.addEventListener("change", saveCurrentSearch);
+  clearButton?.addEventListener("click", () => {
+    writeHistory([]);
+    renderHistory();
+  });
+  document.addEventListener("click", event => {
+    if (!event.target.closest(".admin-gallery-search-wrap")) {
+      historyFocused = false;
+      renderHistory();
+    }
+  });
+  renderHistory();
+})();
+// TEMPLATE CARD
+function createCardAdmin(book, index) {
+  return `
+    <div class="book-card btn-detail" data-index="${index}">
+      <img src="${book.img}">
+      <div class="book-info">
+        <h3>${book.title}</h3>
+        <p>Kategori: ${book.category}</p>
+        <div class="book-actions">
+          <button class="btn-edit">Edit</button>
+          <button class="btn-delete btn-delete-book">Hapus</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function createCardUser(book, index) {
+  return `
+    <div class="book-card btn-detail" data-index="${index}">
+      <img src="${book.img}">
+      <div class="book-info">
+        <h3>${book.title}</h3>
+        <p>Kategori: ${book.category}</p>
+      </div>
+    </div>
+  `;
+}
+// COUNT
+function updateCount() {
+  const total = getData().length;
+  dataCount.textContent = total;
+}
+// RENDER - admin
+const bookGridAdmin = document.getElementById("bookGridAdmin");
+const dataCount = document.getElementById("dataCount");
+function renderBooksAdmin() {
+  const books = getData();
+  bookGridAdmin.innerHTML = "";
+  books.forEach((book, index) => {
+    bookGridAdmin.innerHTML += createCardAdmin(book, index);
+  });
+  updateCount();
+}
+if (document.getElementById("bookGridAdmin")) {
+  renderBooksAdmin();
+}
+// RENDER-USER
+const bookGridUser = document.getElementById("bookGridUser");
+function renderBooksUser() {
+  if (!bookGridUser) return;
+  const books = getData();
+  console.log(books);
+  bookGridUser.innerHTML = "";
+  books.forEach((book, index) => {
+    bookGridUser.innerHTML += createCardUser(book, index);
+  });
+}
+if (document.getElementById("bookGridUser")) {
+  renderBooksUser();
+  setTimeout(() => {
+    const openIndex = localStorage.getItem("openBookDetail");
+    if (openIndex !== null) {
+      showDetail(openIndex);
+      localStorage.removeItem("openBookDetail");
+    }
+  }, 800);
+}
+
+
+
+// ================= TOOLS BOOK =================
+// DELETE ONE
+function deleteBook(index) {
+  let books = getData();
+  books.splice(index, 1);
+  saveData(books);
+  renderBooksAdmin();
+}
+// DELETE ALL 
+const btnHapusSemua = document.getElementById("btnHapusSemua");
+if (btnHapusSemua) {
+  btnHapusSemua.addEventListener("click", () => {
+    const total = getData().length;
+    if (total === 0) return;
+    if (confirm(`Yakin hapus semua (${total} buku)?`)) {
+      localStorage.removeItem("books");
+      renderBooksAdmin();
+    }
+  });
+}
+// EDIT BOOK
+function loadEditBook() {
+  const editIndex = localStorage.getItem("editBookIndex");
+  if (editIndex === null || editIndex === "") return;
+  const books = getData();
+  const book = books[editIndex];
+  document.getElementById("judul_buku").value = book.title;
+  document.getElementById("pengarang").value = book.author;
+  document.getElementById("kategori").value = book.category;
+  document.getElementById("abstrak").value = book.abstract;
+  document.getElementById("penerbit").value = book.penerbit;
+  const submitBtn = document.querySelector(".btn-primary");
+  submitBtn.innerHTML = "💾 Update";
+}
+if (document.getElementById("formTambah")) {
+  loadEditBook();
+}
+// CLOSE DETAIL
+document.addEventListener("click", function (e) {
+  const modal =
+    document.getElementById("detailModal");
+  if (e.target.classList.contains("close-detail")) {
+    modal.style.display = "none";
+  }
+  if (e.target === modal) {
+    modal.style.display = "none";
+  }
+});
+// KERANGKA DETAIL BOOK
+document.body.insertAdjacentHTML("beforeend", `
+  <div id="detailModal" class="detail-modal">
+    <div class="detail-content">
+      <button class="close-detail">&times;</button>
+      <div class="detail-left">
+        <img id="detailImg">
+      </div>
+      <div class="detail-right">
+        <h1 id="detailTitle"></h1>
+        <div class="title-line"></div>
+        <div class="start-scrol">
+          <div class="detail-grid">
+            <div class="info-card">
+              <div class="info-icon green">👤</div>
+              <div>
+                <span>Pengarang</span>
+                <h3 id="detailAuthor"></h3>
+              </div>
+            </div>
+            <div class="info-card">
+              <div class="info-icon blue">📚</div>
+              <div>
+                <span>Kategori</span>
+                <h3 id="detailCategory"></h3>
+              </div>
+            </div>
+            <div class="info-card">
+              <div class="info-icon pink">🏢</div>
+              <div>
+                <span>Penerbit</span>
+                <h3 id="detailPublisher"></h3>
+              </div>
+            </div>
+            <div class="info-card">
+              <div class="info-icon purple">📅</div>
+              <div>
+                <span>Tahun</span>
+                <h3 id="detailYear"></h3>
+              </div>
+            </div>
+          </div>
+          <!-- ABSTRAK -->
+          <div class="abstract-box">
+            <h2>📖 Abstrak</h2>
+            <div class="abstract-content">
+              <p id="detailAbstract"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+`);
+// PANGGIL DETAIL BOOK
+function showDetail(index) {
+  const books = getData();
+  const book = books[index];
+  document.getElementById("detailImg").src = book.img;
+  document.getElementById("detailTitle").textContent = book.title;
+  document.getElementById("detailAuthor").textContent = book.author;
+  document.getElementById("detailCategory").textContent = book.category;
+  document.getElementById("detailPublisher").textContent = book.penerbit;
+  document.getElementById("detailAbstract").textContent = book.abstract;
+  const tahun = book.penerbit.match(/\d{4}/);
+  document.getElementById("detailYear").textContent = tahun ? tahun[0] : "-";
+  document.getElementById("detailModal").style.display = "flex";
+}
+// EVENT LISTENERNYA
+document.addEventListener("click", function (e) {
+  // cari card
+  const card = e.target.closest(".book-card")
+  if (!card) return;
+  const index = card.dataset.index;
+  // DELETE
+  if (e.target.classList.contains("btn-delete-book")) {
+    if (confirm("Yakin hapus buku ini?")) {
+      deleteBook(index);
+    }
+    return;
+  }
+  // EDIT
+  if (e.target.classList.contains("btn-edit")) {
+    localStorage.setItem("editBookIndex", index);
+    window.location.href = "admin-add-book.html";
+    return;
+  }
+  // DETAIL
+  if (e.target.closest(".btn-detail")) {
+    showDetail(index);
+  }
+});
+
+
+
+
+
+/* ================= CONTACT FORM ================= */
+const contactForm = document.getElementById("contactForm");
+if (contactForm) {
+  contactForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const nama = document.getElementById("nama").value;
+    const email = document.getElementById("email").value;
+    const subject = document.getElementById("subject").value;
+    const message = document.getElementById("message").value;
+    const messages = JSON.parse(localStorage.getItem("messages")) || [];
+    messages.push({
+      nama,
+      email,
+      subject,
+      message,
+      status: "Belum Dibaca",
+      tanggal: new Date().toLocaleString()
+    });
+    localStorage.setItem("messages", JSON.stringify(messages));
+    alert("Pesan berhasil dikirim!");
+    contactForm.reset();
+  });
+}
+
+
+
+
+
+/* ================= ADMIN MESSAGE ================= */
+const messageTableBody = document.getElementById("messageTableBody");
+const filterStatus = document.getElementById("filterStatus");
+const searchMessageInput = document.getElementById("searchMessageInput");
+function renderMessages() {
+  if (!messageTableBody) return;
+  const messages = JSON.parse(localStorage.getItem("messages")) || [];
+  const statusFilter = filterStatus ? filterStatus.value : "";
+  const keyword = searchMessageInput ? searchMessageInput.value.toLowerCase().trim() : "";
+  const filteredMessages = messages.filter(msg => {
+    const cocokStatus = statusFilter === "" || msg.status === statusFilter;
+    const cocokNama = msg.nama.toLowerCase().includes(keyword);
+    return cocokStatus && cocokNama;
+  });
+  messageTableBody.innerHTML = "";
+  if (filteredMessages.length === 0) {
+    messageTableBody.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align:center; padding:30px; color:#888;">
+          📭 Tidak ada pesan ditemukan
+        </td>
+      </tr>
+    `;
+    return;
+  }
+  filteredMessages.forEach((msg, index) => {
+    messageTableBody.innerHTML += `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${msg.nama}</td>
+        <td>${msg.email}</td>
+        <td>${msg.subject}</td>
+        <td><span class="status ${msg.status === "Sudah Dibaca" ? "read" : "unread"}">${msg.status}</span></td>
+        <td class="table-action">
+          <button class="btn-read" data-index="${messages.indexOf(msg)}">Baca Pesan</button>
+          <button class="btn-delete btn-delete-message" data-index="${messages.indexOf(msg)}">Hapus</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+renderMessages();
+
+//BUTTON ACTION
+document.addEventListener("click", function (e) {
+  const messages = JSON.parse(localStorage.getItem("messages")) || [];
+  if (e.target.classList.contains("btn-read")) {
+    const index = e.target.dataset.index;
+    const msg = messages[index];
+    document.getElementById("detailAvatar").textContent = msg.nama.charAt(0).toUpperCase();
+    document.getElementById("detailNama").textContent = msg.nama;
+    document.getElementById("detailEmail").textContent = msg.email;
+    document.getElementById("detailSubjek").textContent = msg.subject;
+    document.getElementById("detailTanggal").textContent = msg.tanggal;
+    document.getElementById("detailPesan").textContent = msg.message;
+    messagePopup.style.display = "flex";
+    messages[index].status = "Sudah Dibaca";
+    localStorage.setItem("messages", JSON.stringify(messages));
+    renderMessages();
+    updateMessageBadge();
+    return;
+  }
+  if (e.target.classList.contains("btn-delete-message")) {
+    const index = e.target.dataset.index;
+    if (confirm("Yakin ingin menghapus pesan ini?")) {
+      messages.splice(index, 1);
+      localStorage.setItem("messages", JSON.stringify(messages));
+      renderMessages();
+      updateMessageBadge();
+    }
+    return;
+  }
+});
+// filter status
+if (filterStatus) {
+  filterStatus.addEventListener("change", renderMessages);
+}
+// search nama
+if (searchMessageInput) {
+  searchMessageInput.addEventListener("input", renderMessages);
+}
+
+//pop up
+const messagePopup = document.getElementById("messagePopup");
+const messageDetail = document.getElementById("messageDetail");
+const closeMessagePopup = document.getElementById("closeMessagePopup");
+if (closeMessagePopup) {
+  closeMessagePopup.addEventListener("click", () => {
+    messagePopup.style.display = "none";
+  });
+}
+if (messagePopup) {
+  window.addEventListener("click", (e) => {
+    if (e.target === messagePopup) {
+      messagePopup.style.display = "none";
+    }
+  });
+}
+function updateMessageBadge() {
+  const badge = document.getElementById("messageBadge");
+  if (!badge) return;
+
+  const messages =
+    JSON.parse(localStorage.getItem("messages")) || [];
+
+  const unreadCount = messages.filter(
+    msg => msg.status === "Belum Dibaca"
+  ).length;
+
+  badge.textContent =
+  unreadCount > 99 ? "99+" : unreadCount;
+
+  if (unreadCount === 0) {
+    badge.classList.add("hidden");
+  } else {
+    badge.classList.remove("hidden");
+  }
+}
+updateMessageBadge();
+
+
+
+
+
+/* ================= SEARCH TITLE + RIWAYAT PENCARIAN ================= */
+const searchInput = document.querySelector("#SearchInput input");
+const searchButton = document.getElementById("SearchButton");
+const searchHistory = document.getElementById("searchHistory");
+const searchHistoryList = document.getElementById("searchHistoryList");
+const clearSearchHistoryButton = document.getElementById("clearSearchHistory");
+// Riwayat index dan user-galeri disimpan terpisah agar tidak saling tercampur.
+const IS_USER_GALERI_PAGE = window.location.pathname.toLowerCase().endsWith("user-galeri.html");
+const SEARCH_HISTORY_KEY = IS_USER_GALERI_PAGE ? "searchHistoryUserGaleri" : "searchHistory";
+const MAX_SEARCH_HISTORY = 5;
+
+function getSearchHistory() {
+  try {
+    const history = JSON.parse(localStorage.getItem(SEARCH_HISTORY_KEY) || "[]");
+    return Array.isArray(history) ? history : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveSearchHistory(keyword) {
+  hasSearchedOnHome = true;
+  const history = getSearchHistory();
+  // Kata kunci yang sama dipindahkan ke urutan paling baru, bukan digandakan.
+  const updatedHistory = [keyword, ...history.filter(item =>
+    item.toLowerCase() !== keyword.toLowerCase()
+  )].slice(0, MAX_SEARCH_HISTORY);
+  localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(updatedHistory));
+  renderSearchHistory();
+}
+
+let hasSearchedOnHome = false;
+let searchInputFocused = false;
+
+function renderSearchHistory() {
+  if (!searchHistory || !searchHistoryList) return;
+  const history = getSearchHistory();
+  searchHistoryList.innerHTML = "";
+  // Riwayat hanya tampil ketika kolom pencarian sedang difokuskan
+  // atau setelah pengguna melakukan pencarian pada halaman ini.
+  searchHistory.hidden = history.length === 0 || (!searchInputFocused && !hasSearchedOnHome);
+
+  history.forEach(keyword => {
+    const item = document.createElement("li");
+    item.className = "search-history-row";
+
+    const searchItemButton = document.createElement("button");
+    searchItemButton.type = "button";
+    searchItemButton.className = "search-history-item";
+    searchItemButton.textContent = keyword;
+    searchItemButton.title = `Cari kembali: ${keyword}`;
+    searchItemButton.addEventListener("click", () => {
+      searchInput.value = keyword;
+      searchBookByTitle();
+    });
+
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.className = "search-history-remove";
+    removeButton.textContent = "×";
+    removeButton.title = `Hapus riwayat: ${keyword}`;
+    removeButton.setAttribute("aria-label", `Hapus riwayat pencarian ${keyword}`);
+    removeButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const updatedHistory = getSearchHistory().filter(
+        entry => entry.toLowerCase() !== keyword.toLowerCase()
+      );
+      localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(updatedHistory));
+      renderSearchHistory();
+    });
+
+    item.appendChild(searchItemButton);
+    item.appendChild(removeButton);
+    searchHistoryList.appendChild(item);
+  });
+}
+
+function searchBookByTitle() {
+  const rawKeyword = searchInput?.value.trim() || "";
+  const keyword = rawKeyword.toLowerCase();
+  if (!keyword) {
+    alert("Masukkan kata kunci buku terlebih dahulu!");
+    return;
+  }
+
+  // Simpan kata kunci setiap kali pengguna menekan Enter atau tombol Cari.
+  saveSearchHistory(rawKeyword);
+
+  const books = getData();
+  const index = books.findIndex(
+    book => (book.title || "").toLowerCase().includes(keyword)
+  );
+  if (index !== -1) {
+    localStorage.setItem("openBookDetail", index);
+    window.location.href = "user-galeri.html";
+  } else {
+    alert("Buku tidak ditemukan! Saat ini pencarian hanya berdasarkan judul buku.");
+  }
+}
+
+searchButton?.addEventListener("click", searchBookByTitle);
+searchInput?.addEventListener("focus", function () {
+  searchInputFocused = true;
+  renderSearchHistory();
+});
+searchInput?.addEventListener("click", function () {
+  searchInputFocused = true;
+  renderSearchHistory();
+});
+document.addEventListener("click", function (e) {
+  if (!e.target.closest(".search-area")) {
+    searchInputFocused = false;
+    renderSearchHistory();
+  }
+});
+searchInput?.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    searchBookByTitle();
+  }
+});
+clearSearchHistoryButton?.addEventListener("click", function () {
+  localStorage.removeItem(SEARCH_HISTORY_KEY);
+  renderSearchHistory();
+});
+// Sembunyikan saat halaman pertama kali dibuka; tampilkan saat kolom diklik.
+if (searchHistory) searchHistory.hidden = true;
+
+/* ================= ADVANCE SEARCH ================= */
+const openAdvancedSearch = document.getElementById("openAdvancedSearch");
+if (openAdvancedSearch) {
+  openAdvancedSearch.addEventListener("click", function (e) {
+    e.preventDefault();
+    localStorage.setItem("openAdvancedSearch", "true");
+    window.location.href = "user-galeri.html";
+  });
+}
+const advancedModal = document.getElementById("advancedModal");
+if (advancedModal) {
+  const openAdvanced = localStorage.getItem("openAdvancedSearch");
+  if (openAdvanced === "true") {
+    advancedModal.style.display = "flex";
+    localStorage.removeItem("openAdvancedSearch");
+  }
+}
+document.querySelector(".close-advanced")?.addEventListener("click", () => {
+  advancedModal.style.display = "none";
+});
+window.addEventListener("click", e => {
+  if (e.target === advancedModal) {
+    advancedModal.style.display = "none";
+  }
+});
+document.getElementById("btnAdvancedSearch")?.addEventListener("click", function (e) {
+  e.preventDefault();
+  const category = document.getElementById("filterCategory").value.trim().toLowerCase();
+  const author = document.getElementById("filterAuthor").value.trim().toLowerCase();
+  const publisher = document.getElementById("filterPublisher").value.trim().toLowerCase();
+  const year = document.getElementById("filterYear").value.trim();
+  const title = document.getElementById("filterTitle").value.trim().toLowerCase();
+  const books = getData();
+  const filteredBooks = books.filter(book => {
+    const tahun = book.penerbit.match(/\d{4}/)?.[0] || "";
+    return (
+      (title === "" || book.title.toLowerCase().includes(title)) &&
+      (category === "" || book.category.toLowerCase() === category) &&
+      (author === "" || book.author.toLowerCase().includes(author)) &&
+      (publisher === "" || book.penerbit.toLowerCase().includes(publisher)) &&
+      (year === "" || tahun === year)
+    );
+  });
+  bookGridUser.innerHTML = "";
+  if (filteredBooks.length === 0) {
+    bookGridUser.innerHTML =
+      "<div class='empty-book'>📚 Buku tidak ditemukan </div>"
+    advancedModal.style.display = "none";
+    return;
+  }
+  filteredBooks.forEach(book => {
+    const originalIndex = books.indexOf(book);
+    bookGridUser.innerHTML += createCardUser(book, originalIndex);
+  });
+  advancedModal.style.display = "none";
+});
+const categorySelect = document.getElementById("filterCategory");
+if (categorySelect) {
+  categorySelect.addEventListener("change", function () {
+    if (this.value === "") {
+      this.classList.remove("has-value");
+    } else {
+      this.classList.add("has-value");
+    }
+  });
+  if (categorySelect.value !== "") {
+    categorySelect.classList.add("has-value");
+  }
+}
