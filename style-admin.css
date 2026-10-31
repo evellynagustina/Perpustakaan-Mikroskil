@@ -1439,3 +1439,26 @@ textarea {
   font-size: 21px; line-height: 1; cursor: pointer;
 }
 .admin-history-remove:hover { background: rgba(255,90,110,.3); }
+
+
+/* Pesan saat riwayat pencarian admin galeri kosong */
+.admin-history-empty {
+  list-style: none;
+  padding: 12px 14px;
+  color: rgba(255, 255, 255, .78);
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ================= DARK MODE: DETAIL POPUP TEXT ================= */
+/* Khusus dark mode: teks pada popup detail buku dibuat hitam sesuai permintaan. */
+.dark-mode .detail-content,
+.dark-mode .detail-content h1,
+.dark-mode .detail-content h2,
+.dark-mode .detail-content h3,
+.dark-mode .detail-content p,
+.dark-mode .detail-content span,
+.dark-mode .detail-content .abstract-content,
+.dark-mode .detail-content .abstract-box {
+  color: #000000 !important;
+}
