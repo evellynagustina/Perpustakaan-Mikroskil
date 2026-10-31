@@ -19,7 +19,7 @@ loginForm.addEventListener("submit", function (e) {
         loginMessage.textContent = "Login berhasil...";
 
         setTimeout(() => {
-            window.location.href = "admin-home.html";
+            window.location.href = "src/admin-home.html";
         }, 1000);
 
     } else {
