@@ -493,6 +493,12 @@ filterKategoriAdmin?.addEventListener("change", filterBooksAdmin);
     if (!historyPanel || !historyList) return;
     const history = readHistory();
     historyList.innerHTML = "";
+    if (history.length === 0 && historyFocused) {
+      const emptyItem = document.createElement("li");
+      emptyItem.className = "admin-history-empty";
+      emptyItem.textContent = "Belum ada riwayat pencarian";
+      historyList.appendChild(emptyItem);
+    }
     history.forEach(keyword => {
       const row = document.createElement("li");
       row.className = "admin-history-row";
@@ -513,15 +519,23 @@ filterKategoriAdmin?.addEventListener("change", filterBooksAdmin);
       removeItem.className = "admin-history-remove";
       removeItem.textContent = "×";
       removeItem.setAttribute("aria-label", `Hapus riwayat ${keyword}`);
-      removeItem.addEventListener("click", () => {
+      removeItem.addEventListener("click", (event) => {
+        // Jangan biarkan klik tombol X menutup kotak riwayat.
+        event.preventDefault();
+        event.stopPropagation();
+        historyFocused = true;
         writeHistory(readHistory().filter(item => item.toLowerCase() !== keyword.toLowerCase()));
         renderHistory();
+        historyPanel.hidden = false;
       });
 
       row.append(searchItem, removeItem);
       historyList.appendChild(row);
     });
-    historyPanel.hidden = history.length === 0 || !historyFocused;
+    // Kotak tetap tampil selama pencarian aktif, meskipun riwayat kosong.
+    // State panel ditentukan oleh fokus/klik di luar, bukan jumlah item riwayat.
+    historyPanel.hidden = !historyFocused;
+    if (historyFocused) historyPanel.removeAttribute("hidden");
   }
 
   function saveCurrentSearch() {
@@ -539,10 +553,17 @@ filterKategoriAdmin?.addEventListener("change", filterBooksAdmin);
     if (event.key === "Escape") { historyFocused = false; renderHistory(); }
   });
   searchInputAdmin.addEventListener("change", saveCurrentSearch);
-  clearButton?.addEventListener("click", () => {
+  clearButton?.addEventListener("click", (event) => {
+    // Hapus semua isi saja; kotak riwayat tetap terbuka.
+    event.preventDefault();
+    event.stopPropagation();
+    historyFocused = true;
     writeHistory([]);
     renderHistory();
+    historyPanel.hidden = false;
   });
+  // Klik di dalam kotak (termasuk tombol X dan Hapus Semua) tidak menutupnya.
+  historyPanel?.addEventListener("click", event => event.stopPropagation());
   document.addEventListener("click", event => {
     if (!event.target.closest(".admin-gallery-search-wrap")) {
       historyFocused = false;
@@ -956,9 +977,17 @@ function renderSearchHistory() {
   if (!searchHistory || !searchHistoryList) return;
   const history = getSearchHistory();
   searchHistoryList.innerHTML = "";
-  // Riwayat hanya tampil ketika kolom pencarian sedang difokuskan
-  // atau setelah pengguna melakukan pencarian pada halaman ini.
-  searchHistory.hidden = history.length === 0 || (!searchInputFocused && !hasSearchedOnHome);
+  // Di halaman index, kotak riwayat tetap tampil saat kolom pencarian
+  // difokuskan atau setelah pencarian dilakukan, meskipun semua riwayat dihapus.
+  // Perilaku halaman user-galeri tetap seperti sebelumnya.
+  searchHistory.hidden = !searchInputFocused && !hasSearchedOnHome;
+
+  if (history.length === 0 && !searchHistory.hidden) {
+    const emptyItem = document.createElement("li");
+    emptyItem.className = "search-history-empty";
+    emptyItem.textContent = "Belum ada riwayat pencarian";
+    searchHistoryList.appendChild(emptyItem);
+  }
 
   history.forEach(keyword => {
     const item = document.createElement("li");
