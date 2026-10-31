@@ -19,7 +19,7 @@ loginForm.addEventListener("submit", function (e) {
         loginMessage.textContent = "Login berhasil...";
 
         setTimeout(() => {
-            window.location.href = "src/admin-home.html";
+            window.location.href = "epelin%20commit/src/admin-home.html";
         }, 1000);
 
     } else {
