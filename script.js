@@ -576,7 +576,7 @@ filterKategoriAdmin?.addEventListener("change", filterBooksAdmin);
 function createCardAdmin(book, index) {
   const imageSrc = book.img.startsWith("data:")
     ? book.img
-    : "../../" + book.img.replace(/^\.?\//, "");
+    book.img.replace(/^\.?\//, "");
 
   return `
     <div class="book-card btn-detail" data-index="${index}">
