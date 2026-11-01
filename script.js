@@ -754,7 +754,12 @@ document.body.insertAdjacentHTML("beforeend", `
 function showDetail(index) {
   const books = getData();
   const book = books[index];
-  document.getElementById("detailImg").src = book.img;
+  const imageSrc = book.img.startsWith("data:") || 
+                 /^https?:\/\//i.test(book.img)
+  ? book.img
+  : "../../" + book.img.replace(/^\.?\//, "");
+
+  document.getElementById("detailImg").src = imageSrc;
   document.getElementById("detailTitle").textContent = book.title;
   document.getElementById("detailAuthor").textContent = book.author;
   document.getElementById("detailCategory").textContent = book.category;
