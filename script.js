@@ -574,10 +574,8 @@ filterKategoriAdmin?.addEventListener("change", filterBooksAdmin);
 })();
 // TEMPLATE CARD
 function createCardAdmin(book, index) {
-  const imageSrc = book.img.startsWith("data:")
-    ? book.img
-    book.img.replace(/^\.?\//, "");
-
+  const imageSrc = book.img;
+  
   return `
     <div class="book-card btn-detail" data-index="${index}">
       <img src="${imageSrc}">
